@@ -70,6 +70,10 @@ def run_machine(resources):
             input("Press ENTER to continue...\n")
             continue
 
+        if user_input == "off":
+            print("The coffee machine is now turning off.")
+            break
+
         if user_input in MENU:
             selected_drink = MENU[user_input]
             if check_resources(selected_drink):
