@@ -30,6 +30,8 @@ resources = {
     "coffee": 100,
 }
 
+profit = 0
+
 
 # TODO 1: check if there are enough resources
 def check_resources(drink):
@@ -61,7 +63,8 @@ def reduce_resources(drink):
 
 # TODO 3: Create the looping function that accept the coins and reduce the amount in the resources.
 #  If any ingredient goes down to zero, break the loop because the machine is now out of service
-def run_machine(resources):
+def run_machine():
+    global profit
     while True:
 
         user_input = input("What would you like? (espresso/latte/cappuccino): ").lower()
@@ -86,26 +89,31 @@ def run_machine(resources):
                 if amount_paid < selected_drink["cost"]:
                     print("\nSorry, that's not enough. Money refunded")
                 else:
-                    change = round((amount_paid - selected_drink["cost"]), 3)
+                    cost_of_drink = selected_drink["cost"]
+                    change = round((amount_paid - cost_of_drink), 2)
                     print(f"\nHere's your change: ${change}")
-                    resources = reduce_resources(selected_drink)
+
+                    profit += cost_of_drink
+                    reduce_resources(selected_drink)
+                    profit_string = "$" + str(profit)
+                    resources["profit"] = profit_string
+
                     print(f"Here's {user_input}. ☕ Enjoy!\n")
                     input("Press a ENTER to continue...")
+
                     if resources["water"] == 0 or resources["milk"] == 0 or resources["coffee"] == 0:
                         if resources["water"] == 0:
                             out_of_stock = "water"
-                            print(
-                                f"\nSorry, the machine is out of {out_of_stock}.\n🛑This machine is not available anymore.🛑")
+                            print(f"\nSorry, the machine is out of {out_of_stock}.\n 🛑Please turn off the machine. 🛑")
                         if resources["milk"] == 0:
                             out_of_stock = "milk"
                             print(
-                                f"\nSorry, the machine is out of {out_of_stock}.\n🛑This machine is not available anymore.🛑")
+                                f"\nSorry, the machine is out of {out_of_stock}.\n🛑Please turn off the machine. 🛑")
                         if resources["coffee"] == 0:
                             out_of_stock = "coffee"
                             print(
-                                f"\nSorry, the machine is out of {out_of_stock}.\n🛑This machine is not available anymore.🛑")
+                                f"\nSorry, the machine is out of {out_of_stock}.\n🛑Please turn off the machine. 🛑")
                         print(resources)
-                        break
 
 
-run_machine(resources)
+run_machine()
